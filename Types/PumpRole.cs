@@ -19,7 +19,7 @@ public enum PumpRole
     Return
 }
 
-public static class PumpKindExtensions 
+public static class PumpRoleExtensions 
 {
     public static bool IsInZone(this PumpRole role)
     {
