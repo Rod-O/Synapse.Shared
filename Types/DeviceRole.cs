@@ -10,8 +10,8 @@ public static class DeviceRole
     {
         return (Dictionary<string, TRole>)RoleMaps.GetOrAdd(typeof(TRole), _ =>
             Enum.GetValues<TRole>()
-                .ToDictionary(role => role.ToString(), 
-                    role => role, 
+                .ToDictionary(role => role.ToString(),
+                    role => role,
                     StringComparer.OrdinalIgnoreCase));
     }
 
@@ -51,7 +51,7 @@ public static class DeviceRole
                 result = (int)ParseGaugeRole(value);
                 break;
             case DeviceType.Valve:
-                result = (int)ParseValveRole(value);
+                result = ParseValveRole(value);
                 break;
             case DeviceType.Injector:
                 result = (int)ParseInjectorRole(value);
@@ -61,9 +61,26 @@ public static class DeviceRole
         }
         return result;
     }
-    
+
     public static PumpRole ParsePumpRole(string value) => ParseRole<PumpRole>(value);
     public static GaugeRole ParseGaugeRole(string value) => ParseRole<GaugeRole>(value);
-    public static ValveRole ParseValveRole(string value) => ParseRole<ValveRole>(value);
     public static InjectorRole ParseInjectorRole(string value) => ParseRole<InjectorRole>(value);
+
+    // Special handling for valves since they can be either WTS or GrowTank types
+    public static int ParseValveRole(string value)
+    {
+        // Try parsing as WTS valve collection first
+        if (TryParseRole<WtsValveCollection>(value, out var wtsCollection))
+        {
+            return (int)wtsCollection;
+        }
+
+        // Try parsing as grow tank valve type
+        if (TryParseRole<GrowTankValveType>(value, out var growTankType))
+        {
+            return (int)growTankType;
+        }
+
+        throw new ArgumentException($"Unknown valve role: '{value}'", nameof(value));
+    }
 }
