@@ -6,7 +6,8 @@ public enum DeviceType
     Injector,
     Valve,
     Gauge,
-    Sensor
+    Sensor,
+    Lights
 }
 
 public static class DeviceTypeExtensions
@@ -20,6 +21,7 @@ public static class DeviceTypeExtensions
             "valve" => DeviceType.Valve,
             "gauge" => DeviceType.Gauge,
             "sensor" => DeviceType.Sensor,
+            "lights" => DeviceType.Lights,
             _ => throw new ArgumentException($"Unknown device type: {value}")
         };
     }

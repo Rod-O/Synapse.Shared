@@ -56,6 +56,9 @@ public static class DeviceRole
             case DeviceType.Injector:
                 result = (int)ParseInjectorRole(value);
                 break;
+            case DeviceType.Lights:
+                result = 1;  // Lights have no roles, always return 1
+                break;
             default:
                 throw new ArgumentException($"Unknown device type: {deviceType}");
         }
